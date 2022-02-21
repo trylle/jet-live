@@ -304,7 +304,8 @@ namespace TeenyPath {
     path::is_directory() const {
 #if defined(_POSIX_VERSION)
         struct stat sb;
-        lstat(m_path.c_str(), &sb);
+        if (lstat(m_path.c_str(), &sb)==-1)
+            return false;
         return (sb.st_mode & S_IFMT) == S_IFDIR;
 #elif defined(_WIN32)
         DWORD fileAttributes = GetFileAttributesW(this->wstring().c_str());
@@ -317,7 +318,8 @@ namespace TeenyPath {
     path::is_regular_file() const {
 #if defined(_POSIX_VERSION)
         struct stat sb;
-        lstat(m_path.c_str(), &sb);
+        if (lstat(m_path.c_str(), &sb)==-1)
+            return false;
         return (sb.st_mode & S_IFMT) == S_IFREG;
 #elif defined(_WIN32)
         DWORD fileAttributes = GetFileAttributesW(this->wstring().c_str());
@@ -332,7 +334,8 @@ namespace TeenyPath {
     path::is_symlink() const {
 #if defined(_POSIX_VERSION)
         struct stat sb;
-        lstat(m_path.c_str(), &sb);
+        if (lstat(m_path.c_str(), &sb)==-1)
+            return false;
         return (sb.st_mode & S_IFMT) == S_IFLNK;
 #elif defined(_WIN32)
         DWORD fileAttributes = GetFileAttributesW(this->wstring().c_str());
